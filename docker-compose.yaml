@@ -1,0 +1,17 @@
+version: "3"
+services:
+  runner:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    command: "./init.sh"
+    volumes:
+      - ./init.sh:/actions-runner/init.sh
+    restart: unless-stopped
+    init: true
+    environment:
+      RUNNER_URL: $RUNNER_URL
+      RUNNER_TOKEN: $RUNNER_TOKEN
+      RUNNER_NAME: "cimg-runner"
+      RUNNER_LABELS: "container,cimg"
+# volumes:
