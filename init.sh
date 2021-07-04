@@ -6,15 +6,17 @@ URL="${RUNNER_URL}"
 GROUP="${RUNNER_GROUP:=Default}"
 LABELS="${RUNNER_LABELS}"
 WORKDIR="${RUNNER_WORKDIR:=/tmp/_work}"
+PREFIX="${NAME_PREFIX}"
 
 # Detect container name assigned by doker-compose up --scale
 HOSTNAME=$(hostname)
 CONTAINER_NAME="$(sudo docker ps -f "ID=${HOSTNAME}" --format "{{.Names}}")"
+RUNNER_NAME="${PREFIX}${CONTAINER_NAME}"
 
 # Docker outside of docker needs root user permission
 export RUNNER_ALLOW_RUNASROOT=1
 
-CONFIG_CACHE_DIR="config_cache/${CONTAINER_NAME}"
+CONFIG_CACHE_DIR="config_cache/${RUNNER_NAME}"
 
 # Restore runner config from host
 if [ ! -z "$(ls -A ${CONFIG_CACHE_DIR})" ]; then
@@ -33,7 +35,7 @@ if [ ! -e ".runner" ]; then
     --unattended \
     --url "${URL}" \
     --token "${RUNNER_TOKEN}" \
-    --name "${CONTAINER_NAME}" \
+    --name "${RUNNER_NAME}" \
     --runnergroup "${GROUP}" \
     --labels "${LABELS}" \
     --work "${WORKDIR}" \

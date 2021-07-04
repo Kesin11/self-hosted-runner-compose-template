@@ -20,4 +20,5 @@ services:
       GITHUB_ORG: $GITHUB_ORG
       RUNNER_URL: $RUNNER_URL
       RUNNER_LABELS: "container,cimg"
+      NAME_PREFIX: ""
     # privileged: true
