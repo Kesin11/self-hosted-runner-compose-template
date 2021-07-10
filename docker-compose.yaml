@@ -11,8 +11,8 @@ services:
     # command: "/bin/bash"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
-      - ./runner_config_cache:/actions-runner/config_cache
-      - ./init.sh:/actions-runner/init.sh
+      - ./runner_config_cache:/home/circleci/project/config_cache
+      - ./init.sh:/home/circleci/project/init.sh
     restart: unless-stopped
     init: true
     environment:
