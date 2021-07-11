@@ -15,3 +15,19 @@ As a result, runners registerd Github Actions like this,
 ```
 docker-compose up --scale worker=3
 ```
+
+## kubernates
+Launch multiple self-hosted org runner.
+
+```bash
+# Create namespace and secrets
+kubectl create namespace runners
+kubectl create secret generic -n runners runner-secret --from-literal=access-token=$GITHUB_ORG_TOKEN --from-literal=org-name=$GITHUB_ORG
+
+# Deploy
+kubectl apply -f deployment.yaml
+
+# Watch log
+kubectl logs -n runners deployment/actions-runner -
+```
+

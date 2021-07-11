@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: actions-runner
+  namespace: runners
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: actions-runner
+  template:
+    metadata:
+      labels:
+        app: actions-runner
+    spec:
+      volumes:
+      - name: dockersock
+        hostPath:
+          path: /var/run/docker.sock
+      # - name: workdir
+      #   hostPath:
+      #     path: /tmp/github-runner-your-repo
+      containers:
+      - name: runner
+        image: myoung34/github-runner:latest
+        resources:
+          requests:
+            cpu: "0.5"
+            memory: "1024Mi"
+          limits:
+            cpu: "1"
+            memory: "2048Mi"
+        env:
+        - name: ACCESS_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: runner-secret
+              key: access-token
+        - name: ORG_NAME
+          valueFrom:
+            secretKeyRef:
+              name: runner-secret
+              key: org-name
+        - name: RUNNER_SCOPE
+          value: "org"
+        - name: LABELS
+          value: container
+        - name: RUNNER_NAME_PREFIX
+          value: 'docker-github-actions'
+        - name: RUNNER_WORKDIR
+          value: /tmp/runner/work
+        - name: RUNNER_GROUP
+          value: Default
+        volumeMounts:
+        - name: dockersock
+          mountPath: /var/run/docker.sock
+        # - name: workdir
+        #   mountPath: /tmp/github-runner-your-repo
