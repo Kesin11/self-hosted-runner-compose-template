@@ -1,11 +1,14 @@
-# self-hosted-runner-compose-template
-A template running GitHub Actions self hosted runner with docker-compose
+# Github Actions self-hosted runner template
+Template of various how to deploy Github Actions self-hosted runner.
 
-# USAGE
-```
-export GITHUB_ORG_TOKEN=$GITHUB_ORG_TOKEN
-export GITHUB_ORG=$GITHUB_ORG
-export RUNNER_URL=$RUNNER_URL
+# [Docker](./org-ephemeral-docker)
+Deploy to some machine that docker is installed. This is the most simple way, but not practical.
 
-docker-compose up --build -d --scale runner=2
-```
+# [k8s](./org-ephemeral-k8s)
+Deploy to k8s as simple `CronJob'.
+
+# [Cloud Build](./org-ephemeral-cloud-build)
+Deploy to GCP Cloud Build. It also needs Github `worflow_jobs` webhook.
+
+# [Cloud Run](./org-cloud-run)
+Deploy to GCP Cloud Run. It also needs Github `workflow_jobs` webhook.
