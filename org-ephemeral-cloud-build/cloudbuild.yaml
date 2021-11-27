@@ -1,0 +1,18 @@
+steps:
+  - name: myoung34/github-runner:latest
+    dir: /actions-runner # Need changes from CloudBuild default dir(/workspace)
+    env:
+      - 'EPHEMERAL=1'
+      - 'RUNNER_SCOPE=org'
+      - 'LABELS=container'
+      - 'RUNNER_NAME_PREFIX=ephemeral-cloudbuild'
+    secretEnv: ['ACCESS_TOKEN', 'ORG_NAME']
+availableSecrets:
+  secretManager:
+  - versionName: projects/YOUR_PROJECT_ID/secrets/github_org_admin_pat/versions/1
+    env: 'ACCESS_TOKEN'
+  - versionName: projects/YOUR_PROJECT_ID/secrets/github_org_name/versions/1
+    env: 'ORG_NAME'
+timeout: 600s
+# options:
+#   machineType: E2_HIGHCPU_8
