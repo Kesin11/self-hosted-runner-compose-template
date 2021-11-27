@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: actions-runner
+  # namespace: runners
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: actions-runner
+  template:
+    metadata:
+      labels:
+        app: actions-runner
+    spec:
+      volumes:
+      - name: dockersock
+        hostPath:
+          path: /var/run/docker.sock
+      containers:
+      - name: runner
+        image: myoung34/github-runner:latest
+        env:
+        - name: EPHEMERAL
+          value: "1"
+        - name: ACCESS_TOKEN
+          valueFrom:
+            configMapKeyRef:
+              name: runner-config # Need to create runner-config configMap
+              key: ACCESS_TOKEN
+        - name: ORG_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: runner-config # Need to create runner-config configMap
+              key: ORG_NAME
+        - name: RUNNER_SCOPE
+          value: "org"
+        - name: LABELS
+          value: container
+        - name: RUNNER_NAME_PREFIX
+          value: ephemeral-k8s
+        volumeMounts:
+        - name: dockersock
+          mountPath: /var/run/docker.sock
